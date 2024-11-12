@@ -72,10 +72,6 @@ const DramaInput = forwardRef<HTMLInputElement, Props>(
           e.preventDefault()
           handleSelect(filteredDramas[selectedIndex])
           break
-        case 'Tab':
-          e.preventDefault()
-          handleSelect(filteredDramas[selectedIndex])
-          break
         case 'Escape':
           setShowDropdown(false)
           break
