@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { useState, useRef } from 'react'
 import { Tv, Sparkles, RotateCcw } from 'lucide-react'
 import * as htmlToImage from 'html-to-image'
@@ -193,6 +194,7 @@ function App() {
           )}
         </div>
       </div>
+      <Analytics />
     </div>
   )
 }
