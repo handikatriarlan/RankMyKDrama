@@ -54,19 +54,37 @@ function App() {
           )
         );
 
-        const dataUrl = await htmlToImage.toPng(resultRef.current, {
+        // Create a temporary container for the download version
+        const tempContainer = document.createElement('div');
+        tempContainer.style.width = '600px'; // Fixed width for consistent output
+        tempContainer.style.padding = '48px';
+        // tempContainer.style.backgroundColor = '#1e1b4b';
+        tempContainer.style.borderRadius = '24px';
+
+        // Clone the result content
+        const clone = resultRef.current.cloneNode(true) as HTMLElement;
+
+        // Remove any max-width constraints and adjust styles for download
+        clone.style.width = '100%';
+        clone.style.maxWidth = 'none';
+        clone.style.margin = '0';
+        // clone.style.backgroundColor = 'transparent';
+        clone.style.boxShadow = 'none';
+        clone.style.borderRadius = '0';
+        clone.style.padding = '0';
+
+        tempContainer.appendChild(clone);
+        document.body.appendChild(tempContainer);
+
+        const dataUrl = await htmlToImage.toPng(tempContainer, {
           quality: 1.0,
-          pixelRatio: 3,
-          width: 800,
-          height: resultRef.current.offsetHeight,
-          backgroundColor: '#1e1b4b',
+          pixelRatio: 2,
           style: {
-            transform: 'none',
-            margin: '0 auto',
-            padding: '32px'
+            transform: 'none'
           }
         });
 
+        document.body.removeChild(tempContainer);
         return dataUrl;
       } catch (error) {
         console.error('Error generating image:', error);

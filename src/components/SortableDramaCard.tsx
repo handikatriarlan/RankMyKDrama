@@ -7,32 +7,36 @@ interface Props {
   drama: KDrama;
   index: number;
   onRemove: (id: string) => void;
+  isDragging?: boolean;
 }
 
-export function SortableDramaCard({ drama, index, onRemove }: Props) {
+export function SortableDramaCard({ drama, index, onRemove, isDragging }: Props) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
+    isDragging: isSortableDragging,
   } = useSortable({ id: drama.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    opacity: isDragging ? 0.5 : 1,
+    scale: isSortableDragging ? 1.02 : 1,
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="w-full"
+      className={`w-full touch-manipulation ${isSortableDragging ? 'z-10' : ''}`}
     >
-      <div className="relative transform transition-all duration-300 hover:scale-[1.02] bg-white rounded-xl shadow-md hover:shadow-lg">
+      <div className="relative transform transition-all duration-200 bg-white rounded-xl shadow-md hover:shadow-lg">
         <div className="flex items-center p-2 sm:p-4 gap-2 sm:gap-4">
           <div
-            className="flex-shrink-0 cursor-move"
+            className="flex-shrink-0 touch-manipulation cursor-grab active:cursor-grabbing"
             {...attributes}
             {...listeners}
           >
