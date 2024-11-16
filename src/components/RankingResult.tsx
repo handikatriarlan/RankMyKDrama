@@ -60,12 +60,12 @@ export default function RankingResult({ dramas }: Props) {
 
       <div className="mt-8 pt-4 border-t border-white/10 text-center">
         <a
-          href="https://rankmykdrama.xyz"
+          href="https://rankmykdrama.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs sm:text-sm text-purple-200 hover:text-white transition-colors"
         >
-          rankmykdrama.xyz
+          rankmykdrama.vercel.app
         </a>
       </div>
     </div>
