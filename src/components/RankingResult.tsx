@@ -7,17 +7,17 @@ interface Props {
 
 export default function RankingResult({ dramas }: Props) {
   return (
-    <div className="w-full max-w-[90vw] lg:max-w-[1200px] mx-auto bg-gradient-to-br from-purple-900 to-indigo-900 p-6 sm:p-8 rounded-2xl shadow-2xl">
+    <div className="w-full max-w-[90vw] md:max-w-[1000px] mx-auto bg-gradient-to-br from-purple-900 to-indigo-900 p-6 sm:p-8 rounded-2xl shadow-2xl">
       <div className="text-center mb-6 sm:mb-8">
         <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">My K-Drama Rankings</h2>
         <p className="text-xs sm:text-sm text-purple-200">My top picks of all time</p>
       </div>
 
-      <div className="space-y-4 max-w-[90vw] lg:max-w-[1100px] mx-auto">
+      <div className="space-y-4 max-w-[90vw] md:max-w-[920px] mx-auto">
         {dramas.map((drama, index) => (
           <div
             key={drama.id}
-            className="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm"
+            className="flex items-start gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm"
           >
             <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative">
               {index === 0 && (
@@ -37,7 +37,7 @@ export default function RankingResult({ dramas }: Props) {
               />
             </div>
             <div className="flex-grow min-w-0">
-              <h3 className="text-base sm:text-lg font-semibold text-white mb-1.5 truncate">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-1.5 whitespace-normal break-words">
                 {index + 1}. {drama.title}
               </h3>
               <div className="flex flex-wrap items-center gap-2">
@@ -59,10 +59,10 @@ export default function RankingResult({ dramas }: Props) {
       </div>
 
       <div className="mt-8 pt-4 border-t border-white/10 text-center">
-        <a
-          href="https://rankmykdrama.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <a 
+          href="https://rankmykdrama.vercel.app" 
+          target="_blank" 
+          rel="noopener noreferrer" 
           className="text-xs sm:text-sm text-purple-200 hover:text-white transition-colors"
         >
           rankmykdrama.vercel.app

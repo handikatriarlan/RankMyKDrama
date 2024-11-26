@@ -33,9 +33,9 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // Reduced activation distance for better mobile experience
-        tolerance: 5, // Added tolerance for smoother activation
-        delay: 50, // Small delay to prevent accidental drags
+        distance: 8,
+        tolerance: 5,
+        delay: 0,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -45,7 +45,6 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string);
-    // Add a class to the body to prevent scrolling while dragging on mobile
     document.body.classList.add('dragging');
   }
 
@@ -87,7 +86,7 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
               />
             ))}
           </SortableContext>
-
+          
           {emptySlots.map((_, index) => (
             <button
               key={`empty-${index}`}
@@ -122,7 +121,7 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
                     />
                   </div>
                   <div className="flex-grow min-w-0">
-                    <p className="font-semibold text-gray-800 mb-1 text-sm sm:text-base truncate">
+                    <p className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">
                       {dramas.findIndex(d => d.id === activeDrama.id) + 1}. {activeDrama.title}
                     </p>
                     <div className="flex flex-wrap gap-1 sm:gap-2 items-center">
