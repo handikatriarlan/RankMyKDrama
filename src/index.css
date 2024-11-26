@@ -17,6 +17,10 @@ body.dragging {
     user-select: none;
 }
 
+.touch-auto {
+    touch-action: auto !important;
+}
+
 .dragging * {
     -webkit-user-select: none;
     user-select: none;

@@ -43,7 +43,7 @@ function App() {
         const images = resultRef.current.getElementsByTagName('img');
         await Promise.all(
           Array.from(images).map(
-            img =>
+            img => 
               new Promise((resolve, reject) => {
                 const image = new Image();
                 image.crossOrigin = 'anonymous';
@@ -54,31 +54,35 @@ function App() {
           )
         );
 
-        // Create a temporary container for the download version
+        // Create a fixed-size container for consistent output
         const tempContainer = document.createElement('div');
-        tempContainer.style.width = '600px'; // Fixed width for consistent output
+        tempContainer.style.width = '1200px';
         tempContainer.style.padding = '48px';
-        // tempContainer.style.backgroundColor = '#1e1b4b';
+        tempContainer.style.backgroundColor = '#1e1b4b';
         tempContainer.style.borderRadius = '24px';
-
+        
         // Clone the result content
         const clone = resultRef.current.cloneNode(true) as HTMLElement;
-
-        // Remove any max-width constraints and adjust styles for download
-        clone.style.width = '100%';
-        clone.style.maxWidth = 'none';
-        clone.style.margin = '0';
-        // clone.style.backgroundColor = 'transparent';
-        clone.style.boxShadow = 'none';
-        clone.style.borderRadius = '0';
-        clone.style.padding = '0';
-
+        
+        // Reset styles for consistent output
+        clone.style.cssText = `
+          width: 100% !important;
+          max-width: none !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        `;
+        
         tempContainer.appendChild(clone);
         document.body.appendChild(tempContainer);
 
         const dataUrl = await htmlToImage.toPng(tempContainer, {
           quality: 1.0,
           pixelRatio: 2,
+          width: 1200,
+          height: tempContainer.offsetHeight,
           style: {
             transform: 'none'
           }
@@ -194,11 +198,11 @@ function App() {
                 <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
                 Create New Ranking
               </button>
-
+              
               <div ref={resultRef}>
                 <RankingResult dramas={dramas} />
               </div>
-
+              
               <ShareButtons
                 onDownload={handleDownload}
                 onShare={handleShare}
