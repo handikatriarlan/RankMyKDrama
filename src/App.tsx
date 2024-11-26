@@ -54,17 +54,18 @@ function App() {
           )
         );
 
-        // Create a fixed-size container for consistent output
         const tempContainer = document.createElement('div');
-        tempContainer.style.width = '1200px';
-        tempContainer.style.padding = '48px';
-        tempContainer.style.backgroundColor = '#1e1b4b';
-        tempContainer.style.borderRadius = '24px';
+        tempContainer.style.cssText = `
+          width: 1200px;
+          padding: 48px;
+          background-color: #1e1b4b;
+          border-radius: 24px;
+          position: fixed;
+          left: -9999px;
+          top: -9999px;
+        `;
         
-        // Clone the result content
         const clone = resultRef.current.cloneNode(true) as HTMLElement;
-        
-        // Reset styles for consistent output
         clone.style.cssText = `
           width: 100% !important;
           max-width: none !important;
@@ -73,6 +74,7 @@ function App() {
           background: transparent !important;
           box-shadow: none !important;
           border-radius: 0 !important;
+          transform: none !important;
         `;
         
         tempContainer.appendChild(clone);

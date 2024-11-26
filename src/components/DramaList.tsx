@@ -33,9 +33,9 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
-        tolerance: 5,
+        distance: 5,
         delay: 0,
+        tolerance: 1000,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -110,7 +110,7 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
           }),
         }}>
           {activeDrama ? (
-            <div className="w-full transform scale-105 opacity-90">
+            <div className="w-full transform scale-105">
               <div className="relative bg-white rounded-xl shadow-2xl">
                 <div className="flex items-center p-2 sm:p-4 gap-2 sm:gap-4">
                   <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16">
