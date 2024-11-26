@@ -45,56 +45,57 @@ function App() {
           Array.from(images).map(
             img => 
               new Promise((resolve, reject) => {
-                const image = new Image();
-                image.crossOrigin = 'anonymous';
-                image.onload = resolve;
-                image.onerror = reject;
-                image.src = img.src;
+                if (img.complete) {
+                  resolve(null);
+                } else {
+                  img.onload = resolve;
+                  img.onerror = reject;
+                }
               })
           )
         );
 
-        const tempContainer = document.createElement('div');
-        tempContainer.style.cssText = `
-          width: 1200px;
-          padding: 48px;
-          background-color: #1e1b4b;
-          border-radius: 24px;
-          position: fixed;
+        const container = document.createElement('div');
+        container.style.cssText = `
+          position: absolute;
           left: -9999px;
           top: -9999px;
+          width: 1200px;
+          padding: 48px;
+          background: #1e1b4b;
+          border-radius: 24px;
         `;
         
-        const clone = resultRef.current.cloneNode(true) as HTMLElement;
-        clone.style.cssText = `
-          width: 100% !important;
-          max-width: none !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          background: transparent !important;
-          box-shadow: none !important;
-          border-radius: 0 !important;
-          transform: none !important;
+        const content = resultRef.current.cloneNode(true) as HTMLElement;
+        content.style.cssText = `
+          width: 100%;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          box-shadow: none;
+          border-radius: 0;
         `;
         
-        tempContainer.appendChild(clone);
-        document.body.appendChild(tempContainer);
+        container.appendChild(content);
+        document.body.appendChild(container);
 
-        const dataUrl = await htmlToImage.toPng(tempContainer, {
-          quality: 1.0,
+        const dataUrl = await htmlToImage.toPng(container, {
+          quality: 1,
           pixelRatio: 2,
           width: 1200,
-          height: tempContainer.offsetHeight,
+          height: container.offsetHeight,
+          skipAutoScale: true,
           style: {
             transform: 'none'
-          }
+          },
+          imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
         });
 
-        document.body.removeChild(tempContainer);
+        document.body.removeChild(container);
         return dataUrl;
       } catch (error) {
         console.error('Error generating image:', error);
-        throw new Error('Failed to generate image');
+        throw error;
       }
     }
     throw new Error('Result reference not found');
@@ -106,9 +107,7 @@ function App() {
       const link = document.createElement('a');
       link.download = 'my-kdrama-ranking.png';
       link.href = dataUrl;
-      document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
     } catch (error) {
       console.error('Error downloading image:', error);
       alert('Failed to download image. Please try again.');
