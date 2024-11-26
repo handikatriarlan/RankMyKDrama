@@ -43,52 +43,59 @@ function App() {
         const images = resultRef.current.getElementsByTagName('img');
         await Promise.all(
           Array.from(images).map(
-            img =>
+            img => 
               new Promise((resolve, reject) => {
-                const image = new Image();
-                image.crossOrigin = 'anonymous';
-                image.onload = resolve;
-                image.onerror = reject;
-                image.src = img.src;
+                if (img.complete) {
+                  resolve(null);
+                } else {
+                  img.onload = resolve;
+                  img.onerror = reject;
+                }
               })
           )
         );
 
-        // Create a temporary container for the download version
-        const tempContainer = document.createElement('div');
-        tempContainer.style.width = '600px'; // Fixed width for consistent output
-        tempContainer.style.padding = '48px';
-        // tempContainer.style.backgroundColor = '#1e1b4b';
-        tempContainer.style.borderRadius = '24px';
+        const container = document.createElement('div');
+        container.style.cssText = `
+          position: absolute;
+          left: -9999px;
+          top: -9999px;
+          width: 1200px;
+          padding: 48px;
+          background: #1e1b4b;
+          border-radius: 24px;
+        `;
+        
+        const content = resultRef.current.cloneNode(true) as HTMLElement;
+        content.style.cssText = `
+          width: 100%;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          box-shadow: none;
+          border-radius: 0;
+        `;
+        
+        container.appendChild(content);
+        document.body.appendChild(container);
 
-        // Clone the result content
-        const clone = resultRef.current.cloneNode(true) as HTMLElement;
-
-        // Remove any max-width constraints and adjust styles for download
-        clone.style.width = '100%';
-        clone.style.maxWidth = 'none';
-        clone.style.margin = '0';
-        // clone.style.backgroundColor = 'transparent';
-        clone.style.boxShadow = 'none';
-        clone.style.borderRadius = '0';
-        clone.style.padding = '0';
-
-        tempContainer.appendChild(clone);
-        document.body.appendChild(tempContainer);
-
-        const dataUrl = await htmlToImage.toPng(tempContainer, {
-          quality: 1.0,
+        const dataUrl = await htmlToImage.toPng(container, {
+          quality: 1,
           pixelRatio: 2,
+          width: 1200,
+          height: container.offsetHeight,
+          skipAutoScale: true,
           style: {
             transform: 'none'
-          }
+          },
+          imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
         });
 
-        document.body.removeChild(tempContainer);
+        document.body.removeChild(container);
         return dataUrl;
       } catch (error) {
         console.error('Error generating image:', error);
-        throw new Error('Failed to generate image');
+        throw error;
       }
     }
     throw new Error('Result reference not found');
@@ -100,9 +107,7 @@ function App() {
       const link = document.createElement('a');
       link.download = 'my-kdrama-ranking.png';
       link.href = dataUrl;
-      document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
     } catch (error) {
       console.error('Error downloading image:', error);
       alert('Failed to download image. Please try again.');
@@ -194,11 +199,11 @@ function App() {
                 <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
                 Create New Ranking
               </button>
-
+              
               <div ref={resultRef}>
                 <RankingResult dramas={dramas} />
               </div>
-
+              
               <ShareButtons
                 onDownload={handleDownload}
                 onShare={handleShare}

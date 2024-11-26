@@ -17,29 +17,30 @@ export function SortableDramaCard({ drama, index, onRemove, isDragging }: Props)
     setNodeRef,
     transform,
     transition,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isDragging: isSortableDragging,
   } = useSortable({ 
     id: drama.id,
-    animateLayoutChanges: () => false // Disable layout animations for smoother mobile experience
+    animateLayoutChanges: () => false
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    touchAction: 'none', // Prevent touch scrolling while dragging
+    touchAction: 'manipulation',
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`w-full touch-manipulation ${isSortableDragging ? 'z-50' : ''}`}
+      className="w-full"
     >
       <div className="relative bg-white rounded-xl shadow-md hover:shadow-lg">
         <div className="flex items-center p-2 sm:p-4 gap-2 sm:gap-4">
           <div 
-            className="flex-shrink-0 touch-manipulation cursor-grab active:cursor-grabbing p-1"
+            className="flex-shrink-0 cursor-grab active:cursor-grabbing p-2"
             {...attributes}
             {...listeners}
           >

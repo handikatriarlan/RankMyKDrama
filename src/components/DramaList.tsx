@@ -45,12 +45,12 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string);
-    document.body.classList.add('dragging');
+    document.body.style.overflow = 'hidden';
   }
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    document.body.classList.remove('dragging');
+    document.body.style.overflow = '';
     setActiveId(null);
 
     if (over && active.id !== over.id) {
@@ -110,7 +110,7 @@ export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore
           }),
         }}>
           {activeDrama ? (
-            <div className="w-full transform scale-105 opacity-90">
+            <div className="w-full">
               <div className="relative bg-white rounded-xl shadow-2xl">
                 <div className="flex items-center p-2 sm:p-4 gap-2 sm:gap-4">
                   <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16">
