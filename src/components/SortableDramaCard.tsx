@@ -17,7 +17,6 @@ export function SortableDramaCard({ drama, index, onRemove, isDragging }: Props)
     setNodeRef,
     transform,
     transition,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isDragging: isSortableDragging,
   } = useSortable({ 
     id: drama.id,
@@ -28,33 +27,32 @@ export function SortableDramaCard({ drama, index, onRemove, isDragging }: Props)
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    touchAction: 'none',
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="w-full touch-none"
+      className={`w-full touch-manipulation ${isSortableDragging ? 'z-50' : ''}`}
     >
       <div className="relative bg-white rounded-xl shadow-md hover:shadow-lg">
         <div className="flex items-center p-2 sm:p-4 gap-2 sm:gap-4">
           <div 
-            data-handle="true"
-            className="flex-shrink-0 touch-manipulation cursor-grab active:cursor-grabbing p-2"
+            className="flex-shrink-0 touch-manipulation cursor-grab active:cursor-grabbing p-1"
             {...attributes}
             {...listeners}
           >
             <GripVertical className="text-purple-300 hover:text-purple-500 transition-colors w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 touch-pan-y">
+          <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16">
             <img
               src={drama.image}
               alt={drama.title}
               className="w-full h-full object-cover rounded-lg shadow-sm"
-              draggable={false}
             />
           </div>
-          <div className="flex-grow min-w-0 touch-pan-y">
+          <div className="flex-grow min-w-0">
             <p className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">
               {index + 1}. {drama.title}
             </p>

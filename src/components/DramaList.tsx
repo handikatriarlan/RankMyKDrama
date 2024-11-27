@@ -27,12 +27,7 @@ interface Props {
   onAddMore: () => void;
 }
 
-export default function DramaList({
-  dramas,
-  onDramasReorder,
-  onRemove,
-  onAddMore,
-}: Props) {
+export default function DramaList({ dramas, onDramasReorder, onRemove, onAddMore }: Props) {
   const [activeId, setActiveId] = React.useState<string | null>(null);
 
   const sensors = useSensors(
@@ -40,7 +35,7 @@ export default function DramaList({
       activationConstraint: {
         distance: 8,
         tolerance: 5,
-        delay: 100,
+        delay: 0,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -49,15 +44,13 @@ export default function DramaList({
   );
 
   function handleDragStart(event: DragStartEvent) {
-    const { active } = event;
-    // Check if drag started from grip handle
-    if ((event.activatorEvent.target as HTMLElement).closest('[data-handle="true"]')) {
-      setActiveId(active.id as string);
-    }
+    setActiveId(event.active.id as string);
+    document.body.classList.add('dragging');
   }
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    document.body.classList.remove('dragging');
     setActiveId(null);
 
     if (over && active.id !== over.id) {
@@ -68,7 +61,7 @@ export default function DramaList({
   }
 
   const emptySlots = Array(7 - dramas.length).fill(null);
-  const activeDrama = dramas.find((d) => d.id === activeId);
+  const activeDrama = dramas.find(d => d.id === activeId);
 
   return (
     <div className="w-full">
@@ -80,7 +73,7 @@ export default function DramaList({
       >
         <div className="space-y-3">
           <SortableContext
-            items={dramas.map((d) => d.id)}
+            items={dramas.map(d => d.id)}
             strategy={verticalListSortingStrategy}
           >
             {dramas.map((drama, index) => (
@@ -93,7 +86,7 @@ export default function DramaList({
               />
             ))}
           </SortableContext>
-
+          
           {emptySlots.map((_, index) => (
             <button
               key={`empty-${index}`}
@@ -107,17 +100,15 @@ export default function DramaList({
           ))}
         </div>
 
-        <DragOverlay
-          dropAnimation={{
-            sideEffects: defaultDropAnimationSideEffects({
-              styles: {
-                active: {
-                  opacity: '0.5',
-                },
+        <DragOverlay dropAnimation={{
+          sideEffects: defaultDropAnimationSideEffects({
+            styles: {
+              active: {
+                opacity: '0.5',
               },
-            }),
-          }}
-        >
+            },
+          }),
+        }}>
           {activeDrama ? (
             <div className="w-full transform scale-105 opacity-90">
               <div className="relative bg-white rounded-xl shadow-2xl">
@@ -127,18 +118,14 @@ export default function DramaList({
                       src={activeDrama.image}
                       alt={activeDrama.title}
                       className="w-full h-full object-cover rounded-lg shadow-sm"
-                      draggable={false}
                     />
                   </div>
                   <div className="flex-grow min-w-0">
                     <p className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">
-                      {dramas.findIndex((d) => d.id === activeDrama.id) + 1}.{' '}
-                      {activeDrama.title}
+                      {dramas.findIndex(d => d.id === activeDrama.id) + 1}. {activeDrama.title}
                     </p>
                     <div className="flex flex-wrap gap-1 sm:gap-2 items-center">
-                      <span className="text-xs sm:text-sm text-gray-500">
-                        {activeDrama.year}
-                      </span>
+                      <span className="text-xs sm:text-sm text-gray-500">{activeDrama.year}</span>
                       <div className="flex flex-wrap gap-1">
                         {activeDrama.genres.map((genre) => (
                           <span
