@@ -1,4 +1,4 @@
-import { Share2, Download, Instagram } from 'lucide-react';
+import { Share2, Download } from 'lucide-react';
 import { KDrama } from '../types';
 
 interface Props {
@@ -46,15 +46,6 @@ export default function ShareButtons({ onDownload, onShare, dramas }: Props) {
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
         Share on X
-      </a>
-      <a
-        href="https://www.instagram.com/create/story"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
-      >
-        <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
-        Share to Instagram
       </a>
     </div>
   );
